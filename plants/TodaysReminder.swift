@@ -7,75 +7,78 @@
 import SwiftUI
 
 struct TodaysReminder: View {
-    @State private var plantReminders: [String] = []
-    @State private var newPlant: String = ""
+    @Binding var reminders: [Reminder] // Accept reminders as a binding
+    @State private var showsheet = false
+    @State private var allDone = false // State to track if all reminders are done
     
     var body: some View {
         NavigationView {
             VStack {
-                Text("My plants🌱")
-                    .font(.title)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
-                    .padding([.top, .trailing])
-                    .padding([.top, .trailing])
-                    .padding([.top, .trailing])
-                
-                Divider()
-                    .overlay(Color.gray)
-
-                
-                Text("Today")
-                    .font(.title2)
-                    .padding(.top, 10)
-                
-                List {
-                    ForEach(plantReminders, id: \.self) { plant in
-                        Text(plant)
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    if let index = plantReminders.firstIndex(of: plant) {
-                                        plantReminders.remove(at: index)
+                if allDone {
+                    DoneView(showsheet: $showsheet, reminders: $reminders) // Show DoneView if all reminders are completed
+                } else {
+                    List {
+                        Section(header: headerView) {
+                            ForEach(reminders) { reminder in
+                                ReminderView(reminder: reminder) {
+                                    // Action to toggle the reminder
+                                    if let index = reminders.firstIndex(where: { $0.id == reminder.id }) {
+                                        reminders[index].isChecked.toggle()
+                                        checkIfAllDone() // Check if all reminders are done
                                     }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
                                 }
                             }
+                            .onDelete(perform: deleteItems)
+                        }
                     }
-                    .onDelete(perform: deleteReminder)
-                }
-                
-                HStack {
-                    TextField("Add a new plant", text: $newPlant)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .navigationTitle("My Plants 🌱")
+                    .navigationBarBackButtonHidden(true) // Hide the back button
                     
-                    Button(action: addReminder) {
-                        Text("Add")
+                    Button(action: { showsheet.toggle() }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("New Reminder")
+                                .foregroundColor(Color("trq"))
+                        }
+                        .foregroundColor(Color("trq"))
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 20)
                     }
                 }
-                .padding()
-            }.padding()
-                .background(Color.black) // Background color
-                .edgesIgnoringSafeArea(.all) // Extend background
-            .navigationTitle("")
+            }
+            .sheet(isPresented: $showsheet) {
+                SetReminderView(reminders: $reminders) // Pass reminders binding to SetReminderView
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    private var headerView: some View {
+        VStack(spacing: 0) {
+            Divider().overlay(Color.gray)
+            HStack {
+                Text("Today   𖤣.𖥧.𖡼.⚘𖤣.𖥧.𖡼.⚘")
+                    .font(.title3) // or any other font style you prefer
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.vertical, 8) // Optional padding for better spacing
+                Spacer() // This will push the text to the left
+            }
         }
     }
     
-    private func addReminder() {
-        if !newPlant.isEmpty {
-            plantReminders.append(newPlant)
-            newPlant = ""
-        }
+    private func deleteItems(at offsets: IndexSet) {
+        reminders.remove(atOffsets: offsets)
+        checkIfAllDone() // Check if all reminders are done after deletion
     }
     
-    private func deleteReminder(at offsets: IndexSet) {
-        plantReminders.remove(atOffsets: offsets)
+    private func checkIfAllDone() {
+        allDone = reminders.allSatisfy { $0.isChecked } // Check if all reminders are marked as checked
     }
 }
 
-struct TodaysReminder_Previews: PreviewProvider {
-    static var previews: some View {
-        TodaysReminder()
-    }
+#Preview {
+    TodaysReminder(reminders: .constant([])) // Provide a binding for preview
 }
+
