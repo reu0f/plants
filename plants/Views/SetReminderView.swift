@@ -6,7 +6,7 @@
 //
 
 /////the new workable one here ///////
-
+ 
 import SwiftUI
 
 struct SetReminderView: View {

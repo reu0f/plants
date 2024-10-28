@@ -16,7 +16,7 @@ struct plants_splash: View {
         NavigationView {
             VStack {
                 Text("My Plants🌱")
-                    .font(.title)
+                    .font(.largeTitle)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)

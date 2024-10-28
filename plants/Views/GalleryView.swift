@@ -9,65 +9,95 @@ import SwiftUI
 
 struct GalleryView: View {
     let images: [String] = [
-        "plant1", 
+        "plant1",
         "plant2",
         "plant3",
-        "plant4","plant5",
+        "plant4",
+        "plant5",
         "plant6",
         "plant7",
         "plant8",
         "plant9"
     ]
+    
+    let comments: [String] = [
+        "A beautiful anthurium clarinervum.",
+        "Bonsai japanese maple tree.",
+        "Fritillaria persica.",
+        "Purple calla lily.",
+        "Blue Hydrangea.",
+        "Spider lilies.",
+        "Lily of the valley flowers.",
+        "Epiphyllum.",
+        "Venus flytrap."
+    ]
+    
     @Environment(\.presentationMode) var presentationMode // Environment variable to control presentation
 
     var body: some View {
         NavigationView {
             VStack {
-                Text("𖤣.𖥧.𖡼.⚘𖤣.𖥧.𖡼.⚘")
-                    .font(.largeTitle)
-                    .foregroundColor(Color("trq"))
-                    .fontWeight(.bold)
-                    .padding(.top)
+                VStack(alignment: .leading) {
+                    Text("My plants 🌱")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.top)
+
+                    // Divider below the title
+                    Divider()
+                        .background(Color.gray)
+                }
+           
 
                 TabView {
-                    ForEach(images, id: \.self) { image in
-                        Image(image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 500) // Adjust height as needed
-                            .clipped()
+                    ForEach(images.indices, id: \.self) { index in
+                        VStack {
+                            Image(images[index])
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 500) // Adjust height as needed
+                                .clipped()
+                            
+                            // Display comment below the image
+                            Text(comments[index])
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .multilineTextAlignment(.center)
+                        }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle())
                 .padding()
+                
                 Spacer() // Push the button to the bottom
 
-                             // Back Button
-                             Button(action: {
-                                 presentationMode.wrappedValue.dismiss() // Dismiss the view
-                             }) {
-                                 HStack {
-                                     Image(systemName: "chevron.left") // Back icon
-                                     Text("Back to Reminders")
-                                         .fontWeight(.bold)
-                                 }
-                                 .font(.headline)
-                                 .padding(.vertical, 10)
-                                 .padding(.horizontal, 70)
-                                 .foregroundColor(.black)
-                                 .background(Color("trq"))
-                                 .cornerRadius(10)                                 .foregroundColor(.black)
-                                 .cornerRadius(10)
-                                 .padding(.horizontal)
-                             }
+                // Back Button
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Dismiss the view
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left") // Back icon
+                        Text("Back to Reminders")
+                            .fontWeight(.bold)
+                    }
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 70)
+                    .foregroundColor(.black)
+                    .background(Color("trq"))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                }
             }
-            .navigationTitle("Plant Gallery")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-           
-        } .navigationBarBackButtonHidden(true)
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
     GalleryView()
 }
+

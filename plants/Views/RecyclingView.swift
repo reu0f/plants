@@ -9,16 +9,34 @@ import SwiftUI
 
 struct RecyclingView: View {
     @Environment(\.presentationMode) var presentationMode
+    @StateObject private var viewModel = RecyclingViewModel() // Initialize the ViewModel
+
     var body: some View {
-       
         NavigationView {
             ScrollView {
                 VStack(spacing: 16) {
+                    VStack(alignment: .leading) {
+                        Text("My plants 🌱")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.top)
+
+                        // Divider below the title
+                        Divider()
+                            .background(Color.gray)
+                    }
+                    // Image at the center
+                    Image("recy_plant") // Make sure the image is added to your asset catalog
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200) // Adjust size as needed
+                        .padding(.top)
+
                     // Title
                     Text("The Importance of Recycling")
-                        .font(.largeTitle)
+                        .font(.title)
                         .fontWeight(.bold)
-                        .padding(.top)
+                        .multilineTextAlignment(.center)
 
                     // Explanation
                     Text("Recycling is the process of converting waste materials into new materials and objects. It helps reduce the consumption of fresh raw materials, lowers energy usage, decreases greenhouse gas emissions, and reduces the need for landfill space.")
@@ -33,13 +51,9 @@ struct RecyclingView: View {
 
                     // Benefits List
                     VStack(spacing: 10) {
-                        BenefitCard(title: "1. Conserves Natural Resources", description: "Recycling reduces the need for extracting, refining, and processing raw materials, which can help protect habitats for plants and wildlife.")
-                        
-                        BenefitCard(title: "2. Saves Energy", description: "Manufacturing products from recycled materials often requires less energy compared to producing them from virgin materials, reducing pollution and greenhouse gas emissions.")
-                        
-                        BenefitCard(title: "3. Reduces Waste", description: "By recycling, we keep materials out of landfills, which can harm the environment and threaten plant and animal habitats.")
-                        
-                        BenefitCard(title: "4. Encourages Sustainable Practices", description: "Recycling promotes a culture of sustainability, encouraging people to be more mindful of their consumption and waste.")
+                        ForEach(viewModel.benefits) { benefit in
+                            BenefitCard(title: benefit.title, description: benefit.description)
+                        }
                     }
                     .padding(.horizontal)
 
@@ -48,29 +62,28 @@ struct RecyclingView: View {
                 .padding()
                 Spacer() // Push the button to the bottom
 
-                             // Back Button
-                             Button(action: {
-                                 presentationMode.wrappedValue.dismiss() // Dismiss the view
-                             }) {
-                                 HStack {
-                                     Image(systemName: "chevron.left") // Back icon
-                                     Text("Back to Reminders")
-                                         .fontWeight(.bold)
-                                 }
-                                 .font(.headline)
-                                 .padding(.vertical, 10)
-                                 .padding(.horizontal, 70)
-                                 .foregroundColor(.black)
-                                 .background(Color("trq"))
-                                 .cornerRadius(10)                                 .foregroundColor(.black)
-                                 .cornerRadius(10)
-                                 .padding(.horizontal)
-                             }
+                // Back Button
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Dismiss the view
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left") // Back icon
+                        Text("Back to Reminders")
+                            .fontWeight(.bold)
+                    }
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 70)
+                    .foregroundColor(.black)
+                    .background(Color("trq"))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                }
             }
-            .navigationTitle("Recycling for Nature")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-           
-        } .navigationBarBackButtonHidden(true)
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
