@@ -1,6 +1,6 @@
 # Plants
 <div align="center">
-<img src="https://github.com/user-attachments/assets/bc4e6a7f-dea5-451a-9c18-08d8fda5edbd" alt="Green Bold Healthy Food Instagram Post" width="500" />
+<img src="https://github.com/user-attachments/assets/bc4e6a7f-dea5-451a-9c18-08d8fda5edbd" alt="interfaces of the app" width="500" />
 </div>
 Welcome to the Plants App! This application is designed to help plant enthusiasts of all levels take care of their green friends. With features to set reminders, learn about recycling benefits, access helpful plant care tips, and browse a beautiful gallery of plants, you'll become a pro at plant care in no time!
 
